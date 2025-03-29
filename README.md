@@ -21,6 +21,9 @@ A lightweight PHP-based API server with SQLite database for authentication and u
   - Authentication logging
   - Password hashing with PHP's password_hash
   - Protection against common username exploits
+  - `.htaccess` protection for sensitive files and directories
+  - Prevention of direct database file access
+  - Directory listing prevention
 
 ## Project Structure
 

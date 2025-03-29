@@ -1,0 +1,14 @@
+# Allow access to HTML, CSS, JS, and image files
+<FilesMatch "\.(html|css|js|jpg|jpeg|png|gif|svg|ico)$">
+    Order Allow,Deny
+    Allow from all
+</FilesMatch>
+
+# Deny access to all other file types
+<FilesMatch "^(?!(.*\.(html|css|js|jpg|jpeg|png|gif|svg|ico)$)).*$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes

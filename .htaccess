@@ -1,5 +1,28 @@
 RewriteEngine On
 RewriteBase /nabz-server/
+
+# Protect sensitive files
+<FilesMatch "\.(db|sqlite|sqlite3|log|ini|env|htaccess)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Protect PHP configuration files
+<FilesMatch "^(auth_config|config)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevent direct access to the logger and migration scripts
+<FilesMatch "^(logger|migration)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Prevent directory listing
+Options -Indexes
+
+# Route API requests to index.php
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ index.php [QSA,L]

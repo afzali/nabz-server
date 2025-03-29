@@ -51,7 +51,7 @@ if (!defined('EVENTS_INCLUDED')) {
         }
         
         // Convert arrays and objects to JSON strings
-        foreach (['tags', 'feedback', 'notif', 'repetition'] as $field) {
+        foreach (['tags', 'feedback', 'notif', 'repetition', 'category'] as $field) {
             if (isset($event_data[$field]) && is_array($event_data[$field])) {
                 $event_data[$field] = json_encode($event_data[$field], JSON_UNESCAPED_UNICODE);
             }
@@ -309,7 +309,7 @@ if (!defined('EVENTS_INCLUDED')) {
         $event_data['updateDate'] = date('Y-m-d\TH:i:sP', time());
         
         // Convert arrays and objects to JSON strings
-        foreach (['tags', 'feedback', 'notif', 'repetition'] as $field) {
+        foreach (['tags', 'feedback', 'notif', 'repetition', 'category'] as $field) {
             if (isset($event_data[$field]) && is_array($event_data[$field])) {
                 $event_data[$field] = json_encode($event_data[$field], JSON_UNESCAPED_UNICODE);
             }

@@ -27,6 +27,10 @@ A lightweight PHP-based API server with SQLite database for authentication and u
   - Directory listing prevention
 
 - **Event Logging**: Comprehensive event tracking with detailed metadata
+  - Modular JavaScript architecture for better maintainability
+  - Proper handling of complex data structures (arrays, JSON)
+  - Consistent API endpoint access
+  - Support for filtering and searching events
 
 ## Project Structure
 
@@ -36,7 +40,17 @@ A lightweight PHP-based API server with SQLite database for authentication and u
 - `auth_config.php` - Authentication settings
 - `logger.php` - Logging functionality
 - `migration.php` - Database migration utilities
+- `events.php` - Event management functionality
 - `public/` - Public assets and test HTML files
+  - `events-test-modular.html` - Modular event management interface
+  - `js/` - JavaScript modules for event management
+    - `api.js` - API endpoint configuration and request handling
+    - `auth.js` - Authentication functionality
+    - `utils.js` - Utility functions for UI and messaging
+    - `create-event.js` - Event creation functionality
+    - `list-events.js` - Event listing and searching
+    - `update-event.js` - Event updating functionality
+    - `delete-event.js` - Event deletion functionality
 - `databases/` - User databases (created automatically)
 - `logs/` - Authentication logs
 
@@ -47,6 +61,16 @@ A lightweight PHP-based API server with SQLite database for authentication and u
 - Centralized API endpoint configuration using constants
 - Dynamic form fields based on authentication configuration
 - Automatic configuration fetching from server
+- Modular JavaScript architecture for better code organization and maintainability
+
+## Recent Updates
+
+### v2.1 (March 2025)
+- Refactored event management interface to use modular JavaScript architecture
+- Fixed API endpoint handling to ensure proper access from the frontend
+- Improved handling of array data in event categories
+- Enhanced error handling and debugging for API requests
+- Added proper JSON serialization for array fields in events
 
 ## Setup
 

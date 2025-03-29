@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management Test</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Event Management Test</h1>
+        
+        <div id="message" class="message"></div>
+        
+        <div class="tabs">
+            <div class="tab active" data-tab="auth">Authentication</div>
+            <div class="tab" data-tab="create">Create Event</div>
+            <div class="tab" data-tab="list">List Events</div>
+            <div class="tab" data-tab="update">Update Event</div>
+            <div class="tab" data-tab="delete">Delete Event</div>
+        </div>
+        
+        <div id="auth" class="tab-content active">
+            <div class="section">
+                <h2>Authentication</h2>
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" placeholder="Enter your username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" placeholder="Enter your password">
+                </div>
+                <button id="loginBtn">Login</button>
+                <button id="registerBtn">Register</button>
+                <div id="authStatus" class="form-group" style="margin-top: 20px;">
+                    <p>Status: <span id="statusText">Not logged in</span></p>
+                </div>
+            </div>
+        </div>
+        
+        <div id="create" class="tab-content">
+            <div class="section">
+                <h2>Create New Event</h2>
+                <form id="createEventForm">
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input type="text" id="title" placeholder="Event title">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" placeholder="Event description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="categories">Categories:</label>
+                        <div id="categoriesContainer" class="tag-input">
+                            <input type="text" id="categoryInput" placeholder="Add categories and press Enter">
+                        </div>
+                        <small>You can add multiple categories</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="icon">Icon:</label>
+                        <input type="text" id="icon" placeholder="Material Design icon name">
+                    </div>
+                    <div class="form-group">
+                        <label for="tags">Tags:</label>
+                        <div id="tagsContainer" class="tag-input">
+                            <input type="text" id="tagInput" placeholder="Add tags and press Enter">
+                        </div>
+                        <small>You can add up to 7 tags</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="start">Start Time:</label>
+                        <input type="datetime-local" id="start">
+                    </div>
+                    <div class="form-group">
+                        <label for="end">End Time:</label>
+                        <input type="datetime-local" id="end">
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State:</label>
+                        <select id="state">
+                            <option value="not done">Not Done</option>
+                            <option value="done">Done</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="count">Count:</label>
+                        <input type="number" id="count" placeholder="Numerical value">
+                    </div>
+                    <div class="form-group">
+                        <label for="countUnit">Count Unit:</label>
+                        <input type="text" id="countUnit" placeholder="Unit of measurement">
+                    </div>
+                    <div class="form-group">
+                        <label for="countCondition">Count Condition (min:max):</label>
+                        <input type="text" id="countCondition" placeholder="e.g., 1:10">
+                        <small>Format: min:max (e.g., 1:10)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="timeCondition">Time Condition (HH:mm:HH:mm):</label>
+                        <input type="text" id="timeCondition" placeholder="e.g., 08:00:17:00">
+                        <small>Format: startHour:startMinute:endHour:endMinute</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="durationCondition">Duration Condition (min:max):</label>
+                        <input type="text" id="durationCondition" placeholder="e.g., 30:120">
+                        <small>Format: minMinutes:maxMinutes</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback">Feedback Options:</label>
+                        <div id="feedbackContainer" class="tag-input">
+                            <input type="text" id="feedbackInput" placeholder="Add feedback options and press Enter">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notif">Notifications:</label>
+                        <div id="notifContainer">
+                            <div class="notif-item">
+                                <input type="datetime-local" class="notif-time">
+                                <button type="button" class="add-notif">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="repetition">Repetition:</label>
+                        <div>
+                            <select id="repetitionType">
+                                <option value="">None</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <div id="repetitionDetails" style="display: none; margin-top: 10px;">
+                                <label for="repetitionInterval">Interval:</label>
+                                <input type="number" id="repetitionInterval" min="1" value="1" style="width: 60px;">
+                                <div id="repetitionDaysContainer" style="display: none; margin-top: 10px;">
+                                    <label>Days:</label>
+                                    <div style="display: flex; gap: 10px;">
+                                        <label><input type="checkbox" value="0"> Sun</label>
+                                        <label><input type="checkbox" value="1"> Mon</label>
+                                        <label><input type="checkbox" value="2"> Tue</label>
+                                        <label><input type="checkbox" value="3"> Wed</label>
+                                        <label><input type="checkbox" value="4"> Thu</label>
+                                        <label><input type="checkbox" value="5"> Fri</label>
+                                        <label><input type="checkbox" value="6"> Sat</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit">Create Event</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="list" class="tab-content">
+            <div class="section">
+                <h2>List Events</h2>
+                <div class="form-group">
+                    <label for="searchTerm">Search:</label>
+                    <input type="text" id="searchTerm" placeholder="Search term">
+                </div>
+                <div class="form-group">
+                    <label for="filterCategory">Filter by Category:</label>
+                    <input type="text" id="filterCategory" placeholder="Category">
+                </div>
+                <div class="form-group">
+                    <label for="filterState">Filter by State:</label>
+                    <select id="filterState">
+                        <option value="">All</option>
+                        <option value="not done">Not Done</option>
+                        <option value="done">Done</option>
+                        <option value="pending">Pending</option>
+                    </select>
+                </div>
+                <button id="searchBtn">Search</button>
+                <div id="eventList" class="event-list"></div>
+            </div>
+        </div>
+        
+        <div id="update" class="tab-content">
+            <div class="section">
+                <h2>Update Event</h2>
+                <div class="form-group">
+                    <label for="updateEventId">Event ID:</label>
+                    <input type="number" id="updateEventId" placeholder="Event ID to update">
+                    <button id="loadEventBtn" style="margin-top: 10px;">Load Event</button>
+                </div>
+                <form id="updateEventForm" style="margin-top: 20px;">
+                    <div class="form-group">
+                        <label for="updateTitle">Title:</label>
+                        <input type="text" id="updateTitle" placeholder="Event title">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateDescription">Description:</label>
+                        <textarea id="updateDescription" placeholder="Event description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCategories">Categories:</label>
+                        <div id="updateCategoriesContainer" class="tag-input">
+                            <input type="text" id="updateCategoryInput" placeholder="Add categories and press Enter">
+                        </div>
+                        <small>You can add multiple categories</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateIcon">Icon:</label>
+                        <input type="text" id="updateIcon" placeholder="Material Design icon name">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateTags">Tags:</label>
+                        <div id="updateTagsContainer" class="tag-input">
+                            <input type="text" id="updateTagInput" placeholder="Add tags and press Enter">
+                        </div>
+                        <small>You can add up to 7 tags</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateStart">Start Time:</label>
+                        <input type="datetime-local" id="updateStart">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateEnd">End Time:</label>
+                        <input type="datetime-local" id="updateEnd">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateState">State:</label>
+                        <select id="updateState">
+                            <option value="not done">Not Done</option>
+                            <option value="done">Done</option>
+                            <option value="pending">Pending</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCount">Count:</label>
+                        <input type="number" id="updateCount" placeholder="Numerical value">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCountUnit">Count Unit:</label>
+                        <input type="text" id="updateCountUnit" placeholder="Unit of measurement">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCountCondition">Count Condition (min:max):</label>
+                        <input type="text" id="updateCountCondition" placeholder="e.g., 1:10">
+                        <small>Format: min:max (e.g., 1:10)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateTimeCondition">Time Condition (HH:mm:HH:mm):</label>
+                        <input type="text" id="updateTimeCondition" placeholder="e.g., 08:00:17:00">
+                        <small>Format: startHour:startMinute:endHour:endMinute</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateDurationCondition">Duration Condition (min:max):</label>
+                        <input type="text" id="updateDurationCondition" placeholder="e.g., 30:120">
+                        <small>Format: minMinutes:maxMinutes</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateFeedback">Feedback Options:</label>
+                        <div id="updateFeedbackContainer" class="tag-input">
+                            <input type="text" id="updateFeedbackInput" placeholder="Add feedback options and press Enter">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateNotif">Notifications:</label>
+                        <div id="updateNotifContainer">
+                            <div class="notif-item">
+                                <input type="datetime-local" class="update-notif-time">
+                                <button type="button" class="add-update-notif">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateRepetition">Repetition:</label>
+                        <div>
+                            <select id="updateRepetitionType">
+                                <option value="">None</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <div id="updateRepetitionDetails" style="display: none; margin-top: 10px;">
+                                <label for="updateRepetitionInterval">Interval:</label>
+                                <input type="number" id="updateRepetitionInterval" min="1" value="1" style="width: 60px;">
+                                <div id="updateRepetitionDaysContainer" style="display: none; margin-top: 10px;">
+                                    <label>Days:</label>
+                                    <div style="display: flex; gap: 10px;">
+                                        <label><input type="checkbox" class="update-rep-day" value="0"> Sun</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="1"> Mon</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="2"> Tue</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="3"> Wed</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="4"> Thu</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="5"> Fri</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="6"> Sat</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit">Update Event</button>
+                </form>
+            </div>
+        </div>
+        
+        <div id="delete" class="tab-content">
+            <div class="section">
+                <h2>Delete Event</h2>
+                <div class="form-group">
+                    <label for="deleteEventId">Event ID:</label>
+                    <input type="number" id="deleteEventId" placeholder="Event ID to delete">
+                </div>
+                <button id="deleteEventBtn">Delete Event</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import all modules directly in the HTML file to avoid CORS issues
+        import { updateAuthStatus, initAuth } from './js/auth.js';
+        import { initTabs, showMessage } from './js/utils.js';
+        import { initCreateEvent } from './js/create-event.js';
+        import { initListEvents } from './js/list-events.js';
+        import { initUpdateEvent } from './js/update-event.js';
+        import { initDeleteEvent } from './js/delete-event.js';
+
+        // Initialize all modules when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize auth status
+            updateAuthStatus();
+            
+            // Initialize tabs
+            initTabs();
+            
+            // Initialize auth module
+            initAuth();
+            
+            // Initialize event modules
+            initCreateEvent();
+            initListEvents();
+            initUpdateEvent();
+            initDeleteEvent();
+        });
+    </script>
+</body>
+</html>

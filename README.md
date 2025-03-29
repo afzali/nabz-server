@@ -65,6 +65,12 @@ A lightweight PHP-based API server with SQLite database for authentication and u
 
 ## Recent Updates
 
+### v2.2 (March 2025)
+- Fixed URL query parameter handling in API routing to properly support filtering
+- Improved error handling for API requests with query parameters
+- Enhanced frontend-backend communication with proper URL formatting
+- Fixed event filtering by state, category, and other parameters
+
 ### v2.1 (March 2025)
 - Refactored event management interface to use modular JavaScript architecture
 - Fixed API endpoint handling to ensure proper access from the frontend

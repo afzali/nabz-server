@@ -1,6 +1,6 @@
 // API endpoint constants
 // Make sure the base URL is correct for accessing the API from the public directory
-const API_BASE_URL = '/nabz-server';
+const API_BASE_URL = 'http://localhost/nabz-server';
 const API_ENDPOINTS = {
     REGISTER: `${API_BASE_URL}/register`,
     LOGIN: `${API_BASE_URL}/login`,

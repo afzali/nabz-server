@@ -70,6 +70,11 @@ function require_auth() {
 $request = $_SERVER['REQUEST_URI'];
 $request = str_replace('/nabz-server', '', $request);
 
+// Remove query string from the request path
+if (($pos = strpos($request, '?')) !== false) {
+    $request = substr($request, 0, $pos);
+}
+
 // Extract API version and endpoint
 $parts = explode('/', trim($request, '/'));
 $endpoint = $parts[0] ?? '';

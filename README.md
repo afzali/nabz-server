@@ -133,7 +133,7 @@ Events are stored with the following JSON structure:
 {
   "title": "Task title",
   "description": "Short summary of the task",
-  "category": "Main activity category",
+  "category": ["Main activity category", "Secondary category"],
   "icon": "material_icon_name",
   "tags": ["tag1", "tag2", "tag3"],
   "createDate": "2023-05-01T10:00:00+03:30",
@@ -154,6 +154,8 @@ Events are stored with the following JSON structure:
   }
 }
 ```
+
+**Note**: Both `category` and `tags` fields can be either a single string or an array of strings. The API will handle both formats appropriately.
 
 ## Testing
 

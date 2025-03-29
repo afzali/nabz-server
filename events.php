@@ -175,8 +175,10 @@ if (!defined('EVENTS_INCLUDED')) {
                     $params[] = "%$value%";
                 } else if ($key === 'tag' && !empty($value)) {
                     // Support for searching by tag in the tags JSON array
-                    $sql .= ' AND tags LIKE ?';
-                    $params[] = '%"' . $value . '"%';
+                    $sql .= ' AND (tags = ? OR tags LIKE ? OR json_extract(tags, \'$[*]\') LIKE ?)';
+                    $params[] = $value;
+                    $params[] = '%"' . $value . '"%'; // For JSON array format
+                    $params[] = '%' . $value . '%';   // For partial matches in JSON
                 }
             }
         }

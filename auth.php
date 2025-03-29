@@ -121,10 +121,26 @@ function registerUser($username, $password) {
     // Example: Create a table for user data
     $user_db->exec('CREATE TABLE IF NOT EXISTS activities (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        activity_type TEXT NOT NULL,
-        timestamp INTEGER NOT NULL,
-        duration INTEGER DEFAULT 0,
-        notes TEXT
+        user_id INTEGER NOT NULL,
+        title TEXT,
+        description TEXT,
+        category TEXT,
+        icon TEXT,
+        tags TEXT,
+        createDate TEXT NOT NULL,
+        updateDate TEXT NOT NULL,
+        start TEXT,
+        end TEXT,
+        state TEXT,
+        count REAL,
+        countUnit TEXT,
+        feedback TEXT,
+        countCondition TEXT,
+        timeCondition TEXT,
+        durationCondition TEXT,
+        notif TEXT,
+        repetition TEXT,
+        error TEXT
     )');
     
     // Log the registration event

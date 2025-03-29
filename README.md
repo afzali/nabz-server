@@ -1,4 +1,4 @@
-# Nabz Server - v1.0
+# Nabz Server - v2.0
 
 A lightweight PHP-based API server with SQLite database for authentication and user management.
 
@@ -16,6 +16,7 @@ A lightweight PHP-based API server with SQLite database for authentication and u
   - SQLite database for user data
   - Separate database for each user with UUID-based naming
   - Automatic database creation and initialization
+  - Improved database compatibility to support both camelCase and snake_case field names
 
 - **Security**
   - Authentication logging
@@ -24,6 +25,8 @@ A lightweight PHP-based API server with SQLite database for authentication and u
   - `.htaccess` protection for sensitive files and directories
   - Prevention of direct database file access
   - Directory listing prevention
+
+- **Event Logging**: Comprehensive event tracking with detailed metadata
 
 ## Project Structure
 
@@ -68,17 +71,65 @@ A lightweight PHP-based API server with SQLite database for authentication and u
   - Get authentication configuration
   - Returns: JSON with login type and requirements
 
-## Configuration
+### Event Management
 
-You can modify authentication settings in `auth_config.php`:
+- `GET /nabz-server/events`: List all events for authenticated user
+  - Optional query parameters:
+    - `category`: Filter by category
+    - `state`: Filter by state (done, not done, pending)
+    - `startDate`: Filter by start date
+    - `endDate`: Filter by end date
+    - `search`: Search in title and description
+    - `limit`: Maximum number of events to return (default: 100)
+    - `offset`: Offset for pagination (default: 0)
+  - Returns: List of events matching criteria
 
-- `login_type`: Set to 'username', 'email', 'phone', or 'any'
-- `enable_registration`: Set to true/false to enable/disable new registrations
-- `min_username_length`: Minimum length for usernames
-- `min_password_length`: Minimum length for passwords
-- `restricted_usernames`: Array of usernames that cannot be registered
-- `use_uuid_for_user_db`: Set to true for more secure database naming
-- `enable_login_logs`: Set to true to log authentication events
+- `GET /nabz-server/events/{id}`: Get a specific event by ID
+  - Returns: Event details
+
+- `POST /nabz-server/events`: Create a new event
+  - Required authentication: Bearer token (username)
+  - Request body: Event data in JSON format
+  - Returns: Success status and new event ID
+
+- `PUT /nabz-server/events/{id}`: Update an existing event
+  - Required authentication: Bearer token (username)
+  - Request body: Updated event data in JSON format
+  - Returns: Success status and message
+
+- `DELETE /nabz-server/events/{id}`: Delete an event
+  - Required authentication: Bearer token (username)
+  - Returns: Success status and message
+
+## Event Structure
+
+Events are stored with the following JSON structure:
+
+```json
+{
+  "title": "Task title",
+  "description": "Short summary of the task",
+  "category": "Main activity category",
+  "icon": "material_icon_name",
+  "tags": ["tag1", "tag2", "tag3"],
+  "createDate": "2023-05-01T10:00:00+03:30",
+  "updateDate": "2023-05-01T10:00:00+03:30",
+  "start": "2023-05-01T10:00:00+03:30",
+  "end": "2023-05-01T12:00:00+03:30",
+  "state": "done",
+  "count": 5,
+  "countUnit": "pages",
+  "feedback": ["option1", "option2"],
+  "countCondition": "1:10",
+  "timeCondition": "08:00:17:00",
+  "durationCondition": "30:120",
+  "notif": ["2023-05-01T09:45:00+03:30"],
+  "repetition": {
+    "type": "daily",
+    "interval": 1
+  }
+}
+```
 
 ## Testing
 
@@ -93,3 +144,28 @@ You can modify authentication settings in `auth_config.php`:
 - PHP 7.0 or higher
 - SQLite extension for PHP
 - Web server with rewrite capabilities (Apache with mod_rewrite)
+
+## Configuration
+
+You can modify authentication settings in `auth_config.php`:
+
+- `login_type`: Set to 'username', 'email', 'phone', or 'any'
+- `enable_registration`: Set to true/false to enable/disable new registrations
+- `min_username_length`: Minimum length for usernames
+- `min_password_length`: Minimum length for passwords
+- `restricted_usernames`: Array of usernames that cannot be registered
+- `use_uuid_for_user_db`: Set to true for more secure database naming
+- `enable_login_logs`: Set to true to log authentication events
+
+## Version History
+
+### Version 2 (Current)
+- Added comprehensive event logging API with CRUD operations
+- Improved database compatibility to support both camelCase and snake_case field names
+- Added database migration and reset utilities
+- Enhanced error logging and debugging
+
+### Version 1
+- Initial release with user authentication system
+- User registration and login functionality
+- Database isolation for each user

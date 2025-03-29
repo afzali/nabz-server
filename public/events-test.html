@@ -191,8 +191,11 @@
                         <textarea id="description" placeholder="Event description"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="category">Category:</label>
-                        <input type="text" id="category" placeholder="Event category">
+                        <label for="categories">Categories:</label>
+                        <div id="categoriesContainer" class="tag-input">
+                            <input type="text" id="categoryInput" placeholder="Add categories and press Enter">
+                        </div>
+                        <small>You can add multiple categories</small>
                     </div>
                     <div class="form-group">
                         <label for="icon">Icon:</label>
@@ -203,6 +206,7 @@
                         <div id="tagsContainer" class="tag-input">
                             <input type="text" id="tagInput" placeholder="Add tags and press Enter">
                         </div>
+                        <small>You can add up to 7 tags</small>
                     </div>
                     <div class="form-group">
                         <label for="start">Start Time:</label>
@@ -227,6 +231,64 @@
                     <div class="form-group">
                         <label for="countUnit">Count Unit:</label>
                         <input type="text" id="countUnit" placeholder="Unit of measurement">
+                    </div>
+                    <div class="form-group">
+                        <label for="countCondition">Count Condition (min:max):</label>
+                        <input type="text" id="countCondition" placeholder="e.g., 1:10">
+                        <small>Format: min:max (e.g., 1:10)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="timeCondition">Time Condition (HH:mm:HH:mm):</label>
+                        <input type="text" id="timeCondition" placeholder="e.g., 08:00:17:00">
+                        <small>Format: startHour:startMinute:endHour:endMinute</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="durationCondition">Duration Condition (min:max):</label>
+                        <input type="text" id="durationCondition" placeholder="e.g., 30:120">
+                        <small>Format: minMinutes:maxMinutes</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="feedback">Feedback Options:</label>
+                        <div id="feedbackContainer" class="tag-input">
+                            <input type="text" id="feedbackInput" placeholder="Add feedback options and press Enter">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="notif">Notifications:</label>
+                        <div id="notifContainer">
+                            <div class="notif-item">
+                                <input type="datetime-local" class="notif-time">
+                                <button type="button" class="add-notif">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="repetition">Repetition:</label>
+                        <div>
+                            <select id="repetitionType">
+                                <option value="">None</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <div id="repetitionDetails" style="display: none; margin-top: 10px;">
+                                <label for="repetitionInterval">Interval:</label>
+                                <input type="number" id="repetitionInterval" min="1" value="1" style="width: 60px;">
+                                <div id="repetitionDaysContainer" style="display: none; margin-top: 10px;">
+                                    <label>Days:</label>
+                                    <div style="display: flex; gap: 10px;">
+                                        <label><input type="checkbox" value="0"> Sun</label>
+                                        <label><input type="checkbox" value="1"> Mon</label>
+                                        <label><input type="checkbox" value="2"> Tue</label>
+                                        <label><input type="checkbox" value="3"> Wed</label>
+                                        <label><input type="checkbox" value="4"> Thu</label>
+                                        <label><input type="checkbox" value="5"> Fri</label>
+                                        <label><input type="checkbox" value="6"> Sat</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit">Create Event</button>
                 </form>
@@ -276,8 +338,30 @@
                         <textarea id="updateDescription" placeholder="Event description"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="updateCategory">Category:</label>
-                        <input type="text" id="updateCategory" placeholder="Event category">
+                        <label for="updateCategories">Categories:</label>
+                        <div id="updateCategoriesContainer" class="tag-input">
+                            <input type="text" id="updateCategoryInput" placeholder="Add categories and press Enter">
+                        </div>
+                        <small>You can add multiple categories</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateIcon">Icon:</label>
+                        <input type="text" id="updateIcon" placeholder="Material Design icon name">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateTags">Tags:</label>
+                        <div id="updateTagsContainer" class="tag-input">
+                            <input type="text" id="updateTagInput" placeholder="Add tags and press Enter">
+                        </div>
+                        <small>You can add up to 7 tags</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateStart">Start Time:</label>
+                        <input type="datetime-local" id="updateStart">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateEnd">End Time:</label>
+                        <input type="datetime-local" id="updateEnd">
                     </div>
                     <div class="form-group">
                         <label for="updateState">State:</label>
@@ -286,6 +370,72 @@
                             <option value="done">Done</option>
                             <option value="pending">Pending</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCount">Count:</label>
+                        <input type="number" id="updateCount" placeholder="Numerical value">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCountUnit">Count Unit:</label>
+                        <input type="text" id="updateCountUnit" placeholder="Unit of measurement">
+                    </div>
+                    <div class="form-group">
+                        <label for="updateCountCondition">Count Condition (min:max):</label>
+                        <input type="text" id="updateCountCondition" placeholder="e.g., 1:10">
+                        <small>Format: min:max (e.g., 1:10)</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateTimeCondition">Time Condition (HH:mm:HH:mm):</label>
+                        <input type="text" id="updateTimeCondition" placeholder="e.g., 08:00:17:00">
+                        <small>Format: startHour:startMinute:endHour:endMinute</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateDurationCondition">Duration Condition (min:max):</label>
+                        <input type="text" id="updateDurationCondition" placeholder="e.g., 30:120">
+                        <small>Format: minMinutes:maxMinutes</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateFeedback">Feedback Options:</label>
+                        <div id="updateFeedbackContainer" class="tag-input">
+                            <input type="text" id="updateFeedbackInput" placeholder="Add feedback options and press Enter">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateNotif">Notifications:</label>
+                        <div id="updateNotifContainer">
+                            <div class="notif-item">
+                                <input type="datetime-local" class="update-notif-time">
+                                <button type="button" class="add-update-notif">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="updateRepetition">Repetition:</label>
+                        <div>
+                            <select id="updateRepetitionType">
+                                <option value="">None</option>
+                                <option value="daily">Daily</option>
+                                <option value="weekly">Weekly</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="yearly">Yearly</option>
+                            </select>
+                            <div id="updateRepetitionDetails" style="display: none; margin-top: 10px;">
+                                <label for="updateRepetitionInterval">Interval:</label>
+                                <input type="number" id="updateRepetitionInterval" min="1" value="1" style="width: 60px;">
+                                <div id="updateRepetitionDaysContainer" style="display: none; margin-top: 10px;">
+                                    <label>Days:</label>
+                                    <div style="display: flex; gap: 10px;">
+                                        <label><input type="checkbox" class="update-rep-day" value="0"> Sun</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="1"> Mon</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="2"> Tue</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="3"> Wed</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="4"> Thu</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="5"> Fri</label>
+                                        <label><input type="checkbox" class="update-rep-day" value="6"> Sat</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <button type="submit">Update Event</button>
                 </form>
@@ -486,9 +636,13 @@
         tagInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && tagInput.value.trim()) {
                 e.preventDefault();
-                tags.push(tagInput.value.trim());
-                tagInput.value = '';
-                renderTags();
+                if (tags.length < 7) { // Limit to 7 tags
+                    tags.push(tagInput.value.trim());
+                    tagInput.value = '';
+                    renderTags();
+                } else {
+                    showMessage('Maximum 7 tags allowed', true);
+                }
             }
         });
         
@@ -497,6 +651,121 @@
                 const index = parseInt(e.target.dataset.index);
                 tags = tags.filter((_, i) => i !== index);
                 renderTags();
+            }
+        });
+        
+        // Categories input handling
+        const categoriesContainer = document.getElementById('categoriesContainer');
+        const categoryInput = document.getElementById('categoryInput');
+        let categories = [];
+        
+        function renderCategories() {
+            // Clear existing categories (except input)
+            Array.from(categoriesContainer.children).forEach(child => {
+                if (child !== categoryInput) {
+                    categoriesContainer.removeChild(child);
+                }
+            });
+            
+            // Add categories
+            categories.forEach((category, index) => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'tag';
+                categoryElement.innerHTML = `${category} <span class="tag-remove" data-index="${index}">×</span>`;
+                categoriesContainer.insertBefore(categoryElement, categoryInput);
+            });
+        }
+        
+        categoryInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && categoryInput.value.trim()) {
+                e.preventDefault();
+                categories.push(categoryInput.value.trim());
+                categoryInput.value = '';
+                renderCategories();
+            }
+        });
+        
+        categoriesContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tag-remove')) {
+                const index = parseInt(e.target.dataset.index);
+                categories = categories.filter((_, i) => i !== index);
+                renderCategories();
+            }
+        });
+        
+        // Feedback options input handling
+        const feedbackContainer = document.getElementById('feedbackContainer');
+        const feedbackInput = document.getElementById('feedbackInput');
+        let feedbackOptions = [];
+        
+        function renderFeedbackOptions() {
+            // Clear existing feedback options (except input)
+            Array.from(feedbackContainer.children).forEach(child => {
+                if (child !== feedbackInput) {
+                    feedbackContainer.removeChild(child);
+                }
+            });
+            
+            // Add feedback options
+            feedbackOptions.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'tag';
+                optionElement.innerHTML = `${option} <span class="tag-remove" data-index="${index}">×</span>`;
+                feedbackContainer.insertBefore(optionElement, feedbackInput);
+            });
+        }
+        
+        feedbackInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && feedbackInput.value.trim()) {
+                e.preventDefault();
+                feedbackOptions.push(feedbackInput.value.trim());
+                feedbackInput.value = '';
+                renderFeedbackOptions();
+            }
+        });
+        
+        feedbackContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tag-remove')) {
+                const index = parseInt(e.target.dataset.index);
+                feedbackOptions = feedbackOptions.filter((_, i) => i !== index);
+                renderFeedbackOptions();
+            }
+        });
+        
+        // Notifications handling
+        const notifContainer = document.getElementById('notifContainer');
+        
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-notif')) {
+                const notifItem = document.createElement('div');
+                notifItem.className = 'notif-item';
+                notifItem.innerHTML = `
+                    <input type="datetime-local" class="notif-time">
+                    <button type="button" class="remove-notif">-</button>
+                `;
+                notifContainer.appendChild(notifItem);
+            } else if (e.target.classList.contains('remove-notif')) {
+                e.target.closest('.notif-item').remove();
+            }
+        });
+        
+        // Repetition handling
+        const repetitionType = document.getElementById('repetitionType');
+        const repetitionDetails = document.getElementById('repetitionDetails');
+        const repetitionDaysContainer = document.getElementById('repetitionDaysContainer');
+        
+        repetitionType.addEventListener('change', () => {
+            if (repetitionType.value) {
+                repetitionDetails.style.display = 'block';
+                
+                // Show days selection only for weekly repetition
+                if (repetitionType.value === 'weekly') {
+                    repetitionDaysContainer.style.display = 'block';
+                } else {
+                    repetitionDaysContainer.style.display = 'none';
+                }
+            } else {
+                repetitionDetails.style.display = 'none';
             }
         });
         
@@ -511,11 +780,35 @@
             const endDate = document.getElementById('end').value ? 
                 new Date(document.getElementById('end').value).toISOString() : null;
             
+            // Get notification times
+            const notificationTimes = Array.from(notifContainer.querySelectorAll('.notif-time'))
+                .map(input => input.value ? new Date(input.value).toISOString() : null)
+                .filter(time => time !== null);
+            
+            // Build repetition object
+            let repetition = null;
+            if (repetitionType.value) {
+                repetition = {
+                    type: repetitionType.value,
+                    interval: parseInt(document.getElementById('repetitionInterval').value) || 1
+                };
+                
+                // Add days for weekly repetition
+                if (repetitionType.value === 'weekly') {
+                    const selectedDays = Array.from(repetitionDaysContainer.querySelectorAll('input[type="checkbox"]:checked'))
+                        .map(checkbox => parseInt(checkbox.value));
+                    
+                    if (selectedDays.length > 0) {
+                        repetition.days = selectedDays;
+                    }
+                }
+            }
+            
             // Build event data
             const eventData = {
                 title: document.getElementById('title').value || null,
                 description: document.getElementById('description').value || null,
-                category: document.getElementById('category').value || null,
+                category: categories.length > 0 ? categories : null,
                 icon: document.getElementById('icon').value || null,
                 tags: tags.length > 0 ? tags : null,
                 start: startDate,
@@ -523,6 +816,12 @@
                 state: document.getElementById('state').value,
                 count: document.getElementById('count').value ? parseFloat(document.getElementById('count').value) : null,
                 countUnit: document.getElementById('countUnit').value || null,
+                countCondition: document.getElementById('countCondition').value || null,
+                timeCondition: document.getElementById('timeCondition').value || null,
+                durationCondition: document.getElementById('durationCondition').value || null,
+                feedback: feedbackOptions.length > 0 ? feedbackOptions : null,
+                notif: notificationTimes.length > 0 ? notificationTimes : null,
+                repetition: repetition,
                 createDate: new Date().toISOString(),
                 updateDate: new Date().toISOString()
             };
@@ -534,7 +833,28 @@
                 // Clear form
                 document.getElementById('createEventForm').reset();
                 tags = [];
+                categories = [];
+                feedbackOptions = [];
                 renderTags();
+                renderCategories();
+                renderFeedbackOptions();
+                
+                // Reset notification container
+                notifContainer.innerHTML = `
+                    <div class="notif-item">
+                        <input type="datetime-local" class="notif-time">
+                        <button type="button" class="add-notif">+</button>
+                    </div>
+                `;
+                
+                // Reset repetition
+                repetitionType.value = '';
+                repetitionDetails.style.display = 'none';
+                repetitionDaysContainer.style.display = 'none';
+                document.getElementById('repetitionInterval').value = '1';
+                repetitionDaysContainer.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
                 
                 // Switch to list tab
                 document.querySelector('.tab[data-tab="list"]').click();
@@ -585,15 +905,53 @@
                     const tagsDisplay = event.tags ? 
                         `<p><strong>Tags:</strong> ${Array.isArray(event.tags) ? event.tags.join(', ') : event.tags}</p>` : '';
                     
+                    // Format category for display
+                    let categoryDisplay = 'N/A';
+                    if (event.category) {
+                        if (Array.isArray(event.category)) {
+                            categoryDisplay = event.category.join(', ');
+                        } else {
+                            categoryDisplay = event.category;
+                        }
+                    }
+                    
+                    // Format feedback options
+                    const feedbackDisplay = event.feedback ? 
+                        `<p><strong>Feedback Options:</strong> ${Array.isArray(event.feedback) ? event.feedback.join(', ') : event.feedback}</p>` : '';
+                    
+                    // Format notifications
+                    const notifDisplay = event.notif && event.notif.length > 0 ? 
+                        `<p><strong>Notifications:</strong> ${Array.isArray(event.notif) ? 
+                            event.notif.map(n => new Date(n).toLocaleString()).join(', ') : 
+                            new Date(event.notif).toLocaleString()}</p>` : '';
+                    
+                    // Format repetition
+                    let repetitionDisplay = '';
+                    if (event.repetition && event.repetition.type) {
+                        repetitionDisplay = `<p><strong>Repetition:</strong> ${event.repetition.type} (interval: ${event.repetition.interval || 1})`;
+                        if (event.repetition.days && event.repetition.days.length > 0) {
+                            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                            repetitionDisplay += ` on ${event.repetition.days.map(d => dayNames[d]).join(', ')}`;
+                        }
+                        repetitionDisplay += '</p>';
+                    }
+                    
                     eventItem.innerHTML = `
                         <h3>${event.title || 'Untitled Event'} <span style="color: #888;">(ID: ${event.id})</span></h3>
-                        <p><strong>Category:</strong> ${event.category || 'N/A'}</p>
+                        <p><strong>Category:</strong> ${categoryDisplay}</p>
                         <p><strong>Description:</strong> ${event.description || 'N/A'}</p>
                         ${tagsDisplay}
                         <p><strong>State:</strong> ${event.state || 'N/A'}</p>
                         <p><strong>Created:</strong> ${createDate}</p>
                         <p><strong>Start:</strong> ${startDate}</p>
                         <p><strong>End:</strong> ${endDate}</p>
+                        ${event.count ? `<p><strong>Count:</strong> ${event.count} ${event.countUnit || ''}</p>` : ''}
+                        ${event.countCondition ? `<p><strong>Count Condition:</strong> ${event.countCondition}</p>` : ''}
+                        ${event.timeCondition ? `<p><strong>Time Condition:</strong> ${event.timeCondition}</p>` : ''}
+                        ${event.durationCondition ? `<p><strong>Duration Condition:</strong> ${event.durationCondition}</p>` : ''}
+                        ${feedbackDisplay}
+                        ${notifDisplay}
+                        ${repetitionDisplay}
                         <div style="margin-top: 10px;">
                             <button class="edit-btn" data-id="${event.id}">Edit</button>
                             <button class="delete-btn" data-id="${event.id}">Delete</button>
@@ -623,6 +981,170 @@
             }
         });
         
+        // Update variables for update form
+        const updateTagsContainer = document.getElementById('updateTagsContainer');
+        const updateTagInput = document.getElementById('updateTagInput');
+        let updateTags = [];
+        
+        const updateCategoriesContainer = document.getElementById('updateCategoriesContainer');
+        const updateCategoryInput = document.getElementById('updateCategoryInput');
+        let updateCategories = [];
+        
+        const updateFeedbackContainer = document.getElementById('updateFeedbackContainer');
+        const updateFeedbackInput = document.getElementById('updateFeedbackInput');
+        let updateFeedbackOptions = [];
+        
+        // Render functions for update form
+        function renderUpdateTags() {
+            // Clear existing tags (except input)
+            Array.from(updateTagsContainer.children).forEach(child => {
+                if (child !== updateTagInput) {
+                    updateTagsContainer.removeChild(child);
+                }
+            });
+            
+            // Add tags
+            updateTags.forEach((tag, index) => {
+                const tagElement = document.createElement('div');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `${tag} <span class="tag-remove" data-index="${index}">×</span>`;
+                updateTagsContainer.insertBefore(tagElement, updateTagInput);
+            });
+        }
+        
+        function renderUpdateCategories() {
+            // Clear existing categories (except input)
+            Array.from(updateCategoriesContainer.children).forEach(child => {
+                if (child !== updateCategoryInput) {
+                    updateCategoriesContainer.removeChild(child);
+                }
+            });
+            
+            // Add categories
+            updateCategories.forEach((category, index) => {
+                const categoryElement = document.createElement('div');
+                categoryElement.className = 'tag';
+                categoryElement.innerHTML = `${category} <span class="tag-remove" data-index="${index}">×</span>`;
+                updateCategoriesContainer.insertBefore(categoryElement, updateCategoryInput);
+            });
+        }
+        
+        function renderUpdateFeedbackOptions() {
+            // Clear existing feedback options (except input)
+            Array.from(updateFeedbackContainer.children).forEach(child => {
+                if (child !== updateFeedbackInput) {
+                    updateFeedbackContainer.removeChild(child);
+                }
+            });
+            
+            // Add feedback options
+            updateFeedbackOptions.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'tag';
+                optionElement.innerHTML = `${option} <span class="tag-remove" data-index="${index}">×</span>`;
+                updateFeedbackContainer.insertBefore(optionElement, updateFeedbackInput);
+            });
+        }
+        
+        // Event listeners for update form
+        updateTagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && updateTagInput.value.trim()) {
+                e.preventDefault();
+                if (updateTags.length < 7) { // Limit to 7 tags
+                    updateTags.push(updateTagInput.value.trim());
+                    updateTagInput.value = '';
+                    renderUpdateTags();
+                } else {
+                    showMessage('Maximum 7 tags allowed', true);
+                }
+            }
+        });
+        
+        updateTagsContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tag-remove')) {
+                const index = parseInt(e.target.dataset.index);
+                updateTags.splice(index, 1);
+                renderUpdateTags();
+            }
+        });
+        
+        updateCategoryInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && updateCategoryInput.value.trim()) {
+                e.preventDefault();
+                updateCategories.push(updateCategoryInput.value.trim());
+                updateCategoryInput.value = '';
+                renderUpdateCategories();
+            }
+        });
+        
+        updateCategoriesContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tag-remove')) {
+                const index = parseInt(e.target.dataset.index);
+                updateCategories.splice(index, 1);
+                renderUpdateCategories();
+            }
+        });
+        
+        updateFeedbackInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && updateFeedbackInput.value.trim()) {
+                e.preventDefault();
+                updateFeedbackOptions.push(updateFeedbackInput.value.trim());
+                updateFeedbackInput.value = '';
+                renderUpdateFeedbackOptions();
+            }
+        });
+        
+        updateFeedbackContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('tag-remove')) {
+                const index = parseInt(e.target.dataset.index);
+                updateFeedbackOptions.splice(index, 1);
+                renderUpdateFeedbackOptions();
+            }
+        });
+        
+        // Handle repetition type changes for update form
+        document.getElementById('updateRepetitionType').addEventListener('change', function() {
+            const details = document.getElementById('updateRepetitionDetails');
+            const daysContainer = document.getElementById('updateRepetitionDaysContainer');
+            
+            if (this.value) {
+                details.style.display = 'block';
+                if (this.value === 'weekly') {
+                    daysContainer.style.display = 'block';
+                } else {
+                    daysContainer.style.display = 'none';
+                }
+            } else {
+                details.style.display = 'none';
+                daysContainer.style.display = 'none';
+            }
+        });
+        
+        // Handle notification add button for update form
+        document.querySelector('.add-update-notif').addEventListener('click', function() {
+            const container = document.getElementById('updateNotifContainer');
+            const newItem = document.createElement('div');
+            newItem.className = 'notif-item';
+            newItem.innerHTML = `
+                <input type="datetime-local" class="update-notif-time">
+                <button type="button" class="remove-update-notif">-</button>
+            `;
+            container.appendChild(newItem);
+            
+            // Add event listener to the new remove button
+            newItem.querySelector('.remove-update-notif').addEventListener('click', function() {
+                container.removeChild(newItem);
+            });
+        });
+        
+        // Event delegation for dynamically added remove buttons
+        document.getElementById('updateNotifContainer').addEventListener('click', function(e) {
+            if (e.target.classList.contains('remove-update-notif')) {
+                const item = e.target.parentNode;
+                this.removeChild(item);
+            }
+        });
+        
         // Load Event for Update
         document.getElementById('loadEventBtn').addEventListener('click', async () => {
             const eventId = document.getElementById('updateEventId').value;
@@ -636,11 +1158,160 @@
                 const result = await sendRequest(`${API_ENDPOINTS.EVENTS}/${eventId}`);
                 const event = result.event;
                 
+                // Reset all arrays
+                updateTags = [];
+                updateCategories = [];
+                updateFeedbackOptions = [];
+                
                 // Populate form fields
                 document.getElementById('updateTitle').value = event.title || '';
                 document.getElementById('updateDescription').value = event.description || '';
-                document.getElementById('updateCategory').value = event.category || '';
+                document.getElementById('updateIcon').value = event.icon || '';
+                
+                // Handle category (could be string or array)
+                if (event.category) {
+                    if (Array.isArray(event.category)) {
+                        updateCategories = [...event.category];
+                    } else if (typeof event.category === 'string') {
+                        try {
+                            // Try to parse as JSON
+                            const parsed = JSON.parse(event.category);
+                            if (Array.isArray(parsed)) {
+                                updateCategories = [...parsed];
+                            } else {
+                                updateCategories = [event.category];
+                            }
+                        } catch (e) {
+                            // Not JSON, treat as string
+                            updateCategories = [event.category];
+                        }
+                    }
+                }
+                renderUpdateCategories();
+                
+                // Handle tags
+                if (event.tags && Array.isArray(event.tags)) {
+                    updateTags = [...event.tags];
+                    renderUpdateTags();
+                }
+                
+                // Handle dates
+                if (event.start) {
+                    const startDate = new Date(event.start);
+                    document.getElementById('updateStart').value = startDate.toISOString().slice(0, 16);
+                }
+                
+                if (event.end) {
+                    const endDate = new Date(event.end);
+                    document.getElementById('updateEnd').value = endDate.toISOString().slice(0, 16);
+                }
+                
                 document.getElementById('updateState').value = event.state || 'not done';
+                document.getElementById('updateCount').value = event.count || '';
+                document.getElementById('updateCountUnit').value = event.countUnit || '';
+                document.getElementById('updateCountCondition').value = event.countCondition || '';
+                document.getElementById('updateTimeCondition').value = event.timeCondition || '';
+                document.getElementById('updateDurationCondition').value = event.durationCondition || '';
+                
+                // Handle feedback options
+                if (event.feedback && Array.isArray(event.feedback)) {
+                    updateFeedbackOptions = [...event.feedback];
+                    renderUpdateFeedbackOptions();
+                }
+                
+                // Handle notifications
+                const notifContainer = document.getElementById('updateNotifContainer');
+                notifContainer.innerHTML = ''; // Clear existing notifications
+                
+                if (event.notif && Array.isArray(event.notif)) {
+                    event.notif.forEach((notifTime, index) => {
+                        const notifItem = document.createElement('div');
+                        notifItem.className = 'notif-item';
+                        
+                        const timeInput = document.createElement('input');
+                        timeInput.type = 'datetime-local';
+                        timeInput.className = 'update-notif-time';
+                        
+                        try {
+                            const notifDate = new Date(notifTime);
+                            timeInput.value = notifDate.toISOString().slice(0, 16);
+                        } catch (e) {
+                            console.error('Invalid notification time:', notifTime);
+                        }
+                        
+                        const btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.className = index === 0 ? 'add-update-notif' : 'remove-update-notif';
+                        btn.textContent = index === 0 ? '+' : '-';
+                        
+                        notifItem.appendChild(timeInput);
+                        notifItem.appendChild(btn);
+                        notifContainer.appendChild(notifItem);
+                    });
+                } else {
+                    // Add default empty notification input
+                    const notifItem = document.createElement('div');
+                    notifItem.className = 'notif-item';
+                    notifItem.innerHTML = `
+                        <input type="datetime-local" class="update-notif-time">
+                        <button type="button" class="add-update-notif">+</button>
+                    `;
+                    notifContainer.appendChild(notifItem);
+                }
+                
+                // Handle repetition
+                const repetitionType = document.getElementById('updateRepetitionType');
+                const repetitionDetails = document.getElementById('updateRepetitionDetails');
+                const repetitionDaysContainer = document.getElementById('updateRepetitionDaysContainer');
+                
+                if (event.repetition) {
+                    let repetition;
+                    if (typeof event.repetition === 'string') {
+                        try {
+                            repetition = JSON.parse(event.repetition);
+                        } catch (e) {
+                            repetition = null;
+                        }
+                    } else {
+                        repetition = event.repetition;
+                    }
+                    
+                    if (repetition && repetition.type) {
+                        repetitionType.value = repetition.type;
+                        repetitionDetails.style.display = 'block';
+                        
+                        if (repetition.interval) {
+                            document.getElementById('updateRepetitionInterval').value = repetition.interval;
+                        }
+                        
+                        if (repetition.type === 'weekly' && repetition.days && Array.isArray(repetition.days)) {
+                            repetitionDaysContainer.style.display = 'block';
+                            
+                            // Reset all checkboxes
+                            document.querySelectorAll('.update-rep-day').forEach(cb => {
+                                cb.checked = false;
+                            });
+                            
+                            // Check the appropriate days
+                            repetition.days.forEach(day => {
+                                const checkbox = document.querySelector(`.update-rep-day[value="${day}"]`);
+                                if (checkbox) {
+                                    checkbox.checked = true;
+                                }
+                            });
+                        } else {
+                            repetitionDaysContainer.style.display = 'none';
+                        }
+                    } else {
+                        repetitionType.value = '';
+                        repetitionDetails.style.display = 'none';
+                        repetitionDaysContainer.style.display = 'none';
+                    }
+                } else {
+                    repetitionType.value = '';
+                    repetitionDetails.style.display = 'none';
+                    repetitionDaysContainer.style.display = 'none';
+                }
                 
                 showMessage('Event loaded successfully');
             } catch (error) {
@@ -659,12 +1330,58 @@
                 return;
             }
             
+            // Format datetime values to ISO 8601
+            const startDate = document.getElementById('updateStart').value ? 
+                new Date(document.getElementById('updateStart').value).toISOString() : null;
+                
+            const endDate = document.getElementById('updateEnd').value ? 
+                new Date(document.getElementById('updateEnd').value).toISOString() : null;
+            
+            // Collect notification times
+            const notifTimes = [];
+            document.querySelectorAll('.update-notif-time').forEach(input => {
+                if (input.value) {
+                    notifTimes.push(new Date(input.value).toISOString());
+                }
+            });
+            
+            // Build repetition object
+            let repetition = null;
+            const repetitionType = document.getElementById('updateRepetitionType').value;
+            
+            if (repetitionType) {
+                repetition = {
+                    type: repetitionType,
+                    interval: parseInt(document.getElementById('updateRepetitionInterval').value) || 1
+                };
+                
+                if (repetitionType === 'weekly') {
+                    const days = [];
+                    document.querySelectorAll('.update-rep-day:checked').forEach(cb => {
+                        days.push(parseInt(cb.value));
+                    });
+                    repetition.days = days;
+                }
+            }
+            
             // Build event data
             const eventData = {
                 title: document.getElementById('updateTitle').value || null,
                 description: document.getElementById('updateDescription').value || null,
-                category: document.getElementById('updateCategory').value || null,
+                category: updateCategories.length > 0 ? updateCategories : null,
+                icon: document.getElementById('updateIcon').value || null,
+                tags: updateTags.length > 0 ? updateTags : null,
+                start: startDate,
+                end: endDate,
                 state: document.getElementById('updateState').value,
+                count: document.getElementById('updateCount').value ? parseInt(document.getElementById('updateCount').value) : null,
+                countUnit: document.getElementById('updateCountUnit').value || null,
+                countCondition: document.getElementById('updateCountCondition').value || null,
+                timeCondition: document.getElementById('updateTimeCondition').value || null,
+                durationCondition: document.getElementById('updateDurationCondition').value || null,
+                feedback: updateFeedbackOptions.length > 0 ? updateFeedbackOptions : null,
+                notif: notifTimes.length > 0 ? notifTimes : null,
+                repetition: repetition,
                 updateDate: new Date().toISOString()
             };
             
@@ -675,6 +1392,12 @@
                 // Clear form
                 document.getElementById('updateEventForm').reset();
                 document.getElementById('updateEventId').value = '';
+                updateTags = [];
+                updateCategories = [];
+                updateFeedbackOptions = [];
+                renderUpdateTags();
+                renderUpdateCategories();
+                renderUpdateFeedbackOptions();
                 
                 // Switch to list tab
                 document.querySelector('.tab[data-tab="list"]').click();

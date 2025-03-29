@@ -57,6 +57,11 @@ if (!defined('EVENTS_INCLUDED')) {
             }
         }
         
+        // Handle category as JSON array if it's an array
+        if (isset($event_data['category']) && is_array($event_data['category'])) {
+            $event_data['category'] = json_encode($event_data['category'], JSON_UNESCAPED_UNICODE);
+        }
+        
         // Check if we need to use snake_case or camelCase field names
         $result = $db->query("PRAGMA table_info(activities)");
         $columns = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -155,8 +160,12 @@ if (!defined('EVENTS_INCLUDED')) {
                     $sql .= ' AND createDate <= ?';
                     $params[] = $value;
                 } else if ($key === 'category') {
-                    $sql .= ' AND category = ?';
+                    // Support for JSON querying of categories
+                    // This allows searching in both regular category field and JSON arrays
+                    $sql .= ' AND (category = ? OR category LIKE ? OR json_extract(category, \'$[*]\') LIKE ?)';
                     $params[] = $value;
+                    $params[] = '%"' . $value . '"%'; // For JSON array format
+                    $params[] = '%' . $value . '%';   // For partial matches in JSON
                 } else if ($key === 'state') {
                     $sql .= ' AND state = ?';
                     $params[] = $value;
@@ -164,6 +173,10 @@ if (!defined('EVENTS_INCLUDED')) {
                     $sql .= ' AND (title LIKE ? OR description LIKE ?)';
                     $params[] = "%$value%";
                     $params[] = "%$value%";
+                } else if ($key === 'tag' && !empty($value)) {
+                    // Support for searching by tag in the tags JSON array
+                    $sql .= ' AND tags LIKE ?';
+                    $params[] = '%"' . $value . '"%';
                 }
             }
         }
@@ -183,6 +196,14 @@ if (!defined('EVENTS_INCLUDED')) {
                 foreach (['tags', 'feedback', 'notif', 'repetition'] as $field) {
                     if (!empty($event[$field])) {
                         $event[$field] = json_decode($event[$field], true);
+                    }
+                }
+                
+                // Convert category to array if it's in JSON format
+                if (!empty($event['category']) && $event['category'][0] === '[') {
+                    $decoded = json_decode($event['category'], true);
+                    if (json_last_error() === JSON_ERROR_NONE) {
+                        $event['category'] = $decoded;
                     }
                 }
             }

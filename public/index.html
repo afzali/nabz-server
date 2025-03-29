@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .auth-container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .auth-box {
+            flex: 1;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        input[type="text"], input[type="password"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        .config-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .field-info {
+            font-size: 0.8em;
+            color: #666;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Authentication Test</h1>
+        
+        <div id="message" class="message"></div>
+        
+        <div id="configInfo" class="config-info">
+            <h3>Authentication Configuration</h3>
+            <p>Loading configuration...</p>
+        </div>
+        
+        <div class="auth-container">
+            <div class="auth-box">
+                <h2>Register</h2>
+                <form id="registerForm">
+                    <div>
+                        <label for="regUsername">Username:</label>
+                        <input type="text" id="regUsername" required>
+                        <p id="usernameInfo" class="field-info"></p>
+                    </div>
+                    <div>
+                        <label for="regPassword">Password:</label>
+                        <input type="password" id="regPassword" required>
+                        <p id="passwordInfo" class="field-info"></p>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+            
+            <div class="auth-box">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <div>
+                        <label for="loginUsername">Username:</label>
+                        <input type="text" id="loginUsername" required>
+                    </div>
+                    <div>
+                        <label for="loginPassword">Password:</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API endpoint constants
+        const API_BASE_URL = '/nabz-server';
+        const API_ENDPOINTS = {
+            REGISTER: `${API_BASE_URL}/register`,
+            LOGIN: `${API_BASE_URL}/login`,
+            AUTH_CONFIG: `${API_BASE_URL}/auth-config`
+        };
+        
+        // Configuration object
+        let authConfig = {
+            login_type: 'username',
+            enable_registration: true,
+            min_username_length: 4,
+            min_password_length: 8
+        };
+        
+        // Fetch authentication configuration
+        async function fetchAuthConfig() {
+            try {
+                const response = await fetch(API_ENDPOINTS.AUTH_CONFIG);
+                const result = await response.json();
+                if (result.success) {
+                    authConfig = result.config;
+                    updateConfigDisplay();
+                    updateFieldInfo();
+                }
+            } catch (error) {
+                console.error('Failed to fetch auth configuration:', error);
+            }
+        }
+        
+        // Update the configuration display
+        function updateConfigDisplay() {
+            const configInfo = document.getElementById('configInfo');
+            
+            // Update login type field based on configuration
+            const usernameField = document.getElementById('regUsername');
+            const loginUsernameField = document.getElementById('loginUsername');
+            
+            let loginTypeText = 'Username';
+            let fieldType = 'text';
+            
+            if (authConfig.login_type === 'email') {
+                loginTypeText = 'Email';
+                fieldType = 'email';
+                usernameField.type = fieldType;
+                loginUsernameField.type = fieldType;
+            } else if (authConfig.login_type === 'phone') {
+                loginTypeText = 'Phone Number';
+                fieldType = 'tel';
+                usernameField.type = fieldType;
+                loginUsernameField.type = fieldType;
+            }
+            
+            // Update labels
+            document.querySelector('label[for="regUsername"]').textContent = loginTypeText + ':';
+            document.querySelector('label[for="loginUsername"]').textContent = loginTypeText + ':';
+            
+            // Update configuration display
+            configInfo.innerHTML = `
+                <h3>Authentication Configuration</h3>
+                <ul>
+                    <li><strong>Login Type:</strong> ${authConfig.login_type}</li>
+                    <li><strong>Registration:</strong> ${authConfig.enable_registration ? 'Enabled' : 'Disabled'}</li>
+                    <li><strong>Minimum ${loginTypeText} Length:</strong> ${authConfig.min_username_length} characters</li>
+                    <li><strong>Minimum Password Length:</strong> ${authConfig.min_password_length} characters</li>
+                </ul>
+            `;
+            
+            // Disable registration if not enabled
+            if (!authConfig.enable_registration) {
+                document.getElementById('registerForm').innerHTML = '<p>Registration is currently disabled.</p>';
+            }
+        }
+        
+        // Update field information
+        function updateFieldInfo() {
+            document.getElementById('usernameInfo').textContent = 
+                `Minimum ${authConfig.min_username_length} characters`;
+            
+            document.getElementById('passwordInfo').textContent = 
+                `Minimum ${authConfig.min_password_length} characters`;
+        }
+        
+        function showMessage(text, isError = false) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.textContent = text;
+            msgDiv.className = 'message ' + (isError ? 'error' : 'success');
+            msgDiv.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                msgDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        async function sendRequest(url, data) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (!result.success) throw new Error(result.message);
+                return result;
+            } catch (error) {
+                throw error;
+            }
+        }
+
+        document.getElementById('registerForm').onsubmit = async (e) => {
+            e.preventDefault();
+            
+            // Skip if registration is disabled
+            if (!authConfig.enable_registration) {
+                showMessage('Registration is currently disabled.', true);
+                return;
+            }
+            
+            try {
+                const username = document.getElementById('regUsername').value;
+                const password = document.getElementById('regPassword').value;
+                
+                // Client-side validation
+                if (username.length < authConfig.min_username_length) {
+                    throw new Error(`Username must be at least ${authConfig.min_username_length} characters`);
+                }
+                
+                if (password.length < authConfig.min_password_length) {
+                    throw new Error(`Password must be at least ${authConfig.min_password_length} characters`);
+                }
+                
+                const result = await sendRequest(API_ENDPOINTS.REGISTER, {
+                    username: username,
+                    password: password
+                });
+                showMessage('Registration successful!');
+                
+                // Clear form
+                document.getElementById('regUsername').value = '';
+                document.getElementById('regPassword').value = '';
+            } catch (error) {
+                showMessage(error.message, true);
+            }
+        };
+
+        document.getElementById('loginForm').onsubmit = async (e) => {
+            e.preventDefault();
+            try {
+                const username = document.getElementById('loginUsername').value;
+                const result = await sendRequest(API_ENDPOINTS.LOGIN, {
+                    username: username,
+                    password: document.getElementById('loginPassword').value
+                });
+                showMessage('Login successful!');
+                // Store username in localStorage for the dashboard
+                localStorage.setItem('username', username);
+                // Redirect to dashboard
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                showMessage(error.message, true);
+            }
+        };
+        
+        // Initialize
+        fetchAuthConfig();
+    </script>
+</body>
+</html>

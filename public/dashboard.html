@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .user-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .logout {
+            background-color: #f44336;
+        }
+        .logout:hover {
+            background-color: #d32f2f;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            display: none;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Dashboard</h1>
+        
+        <div id="message" class="message"></div>
+        
+        <div class="user-info">
+            <h2>Welcome, <span id="username">User</span>!</h2>
+            <p>You have successfully logged in.</p>
+        </div>
+        
+        <div class="actions">
+            <button id="profileBtn">View Profile</button>
+            <button id="settingsBtn">Settings</button>
+            <button id="logoutBtn" class="logout">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        // API endpoint constants
+        const API_BASE_URL = '/nabz-server';
+        const API_ENDPOINTS = {
+            REGISTER: `${API_BASE_URL}/register`,
+            LOGIN: `${API_BASE_URL}/login`,
+            AUTH_CONFIG: `${API_BASE_URL}/auth-config`,
+            LOGOUT: `${API_BASE_URL}/logout`
+        };
+        
+        // Check if user is logged in
+        function checkLoginStatus() {
+            // This would typically check a token or session
+            // For now, we'll just check if we were redirected from login
+            const username = localStorage.getItem('username');
+            if (username) {
+                document.getElementById('username').textContent = username;
+            } else {
+                // Redirect to login if not logged in
+                window.location.href = 'index.html';
+            }
+        }
+
+        function showMessage(text, isError = false) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.textContent = text;
+            msgDiv.className = 'message ' + (isError ? 'error' : 'success');
+            msgDiv.style.display = 'block';
+        }
+
+        // Logout function
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('username');
+            showMessage('You have been logged out.');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        // Initialize
+        checkLoginStatus();
+    </script>
+</body>
+</html>

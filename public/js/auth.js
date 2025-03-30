@@ -1,7 +1,7 @@
 import { API_ENDPOINTS, sendRequest } from './api.js';
 import { showMessage } from './utils.js';
 
-// Authentication token (username for simplicity)
+// Authentication token and user info
 let authToken = localStorage.getItem('authToken');
 let currentUser = localStorage.getItem('username');
 
@@ -41,9 +41,9 @@ function initAuth() {
             
             showMessage('Login successful!');
             
-            // Store auth token (username for simplicity)
-            authToken = username;
-            currentUser = username;
+            // Store auth token from server response
+            authToken = result.user.token;
+            currentUser = result.user.username;
             localStorage.setItem('authToken', authToken);
             localStorage.setItem('username', currentUser);
             

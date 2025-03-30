@@ -42,16 +42,8 @@ function get_authenticated_user() {
     
     $token = $matches[1];
     
-    // For simplicity, we're using the username as the token
-    // In a production environment, you would use JWT or another token system
-    global $main_db;
-    $db = connect_db($main_db);
-    
-    $stmt = $db->prepare('SELECT id, username FROM users WHERE username = ?');
-    $stmt->execute([$token]);
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-    
-    return $user ?: null;
+    // Use the new token validation function
+    return validateToken($token);
 }
 
 // Helper function to require authentication

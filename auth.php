@@ -159,6 +159,12 @@ function registerUser($username, $password) {
 function loginUser($username, $password) {
     global $main_db;
     
+    // Simple rate limiting - check for too many failed attempts
+    if (checkLoginAttempts($username)) {
+        log_auth_event($username, 'LOGIN', 'BLOCKED - Too many attempts');
+        return ['success' => false, 'message' => 'Too many login attempts. Please try again later.'];
+    }
+    
     $db = connect_db($main_db);
     
     $stmt = $db->prepare('SELECT * FROM users WHERE username = ?');
@@ -168,16 +174,140 @@ function loginUser($username, $password) {
     if (!$user || !password_verify($password, $user['password'])) {
         // Log failed login attempt
         log_auth_event($username, 'LOGIN', 'FAILED - Invalid credentials');
+        // Record failed attempt
+        recordLoginAttempt($username, false);
         return ['success' => false, 'message' => 'Invalid username or password'];
     }
     
+    // Generate token with expiration (24 hours from now)
+    $expiry = time() + (24 * 60 * 60);
+    $token_data = [
+        'username' => $user['username'],
+        'exp' => $expiry
+    ];
+    $token = base64_encode(json_encode($token_data));
+    
     // Log successful login
     log_auth_event($username, 'LOGIN', 'SUCCESS');
+    // Reset failed attempts on successful login
+    recordLoginAttempt($username, true);
     
     return [
         'success' => true, 
         'message' => 'Login successful',
-        'user_id' => $user['id'],
-        'username' => $user['username']
+        'user' => [
+            'username' => $user['username'],
+            'token' => $token
+        ]
     ];
+}
+
+/**
+ * Validates a token
+ * 
+ * @param string $token The token to validate
+ * @return array|null User data if valid, null if invalid
+ */
+function validateToken($token) {
+    try {
+        $token_data = json_decode(base64_decode($token), true);
+        
+        // Check if token is expired
+        if (!isset($token_data['exp']) || $token_data['exp'] < time()) {
+            return null;
+        }
+        
+        // Check if username exists
+        if (!isset($token_data['username'])) {
+            return null;
+        }
+        
+        global $main_db;
+        $db = connect_db($main_db);
+        
+        $stmt = $db->prepare('SELECT id, username FROM users WHERE username = ?');
+        $stmt->execute([$token_data['username']]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return $user ?: null;
+    } catch (Exception $e) {
+        return null;
+    }
+}
+
+/**
+ * Records a login attempt
+ * 
+ * @param string $username The username
+ * @param bool $success Whether the login was successful
+ */
+function recordLoginAttempt($username, $success) {
+    $attempts_file = __DIR__ . '/logs/login_attempts.json';
+    
+    // Create directory if it doesn't exist
+    if (!file_exists(dirname($attempts_file))) {
+        mkdir(dirname($attempts_file), 0755, true);
+    }
+    
+    // Initialize or load attempts data
+    $attempts = [];
+    if (file_exists($attempts_file)) {
+        $attempts = json_decode(file_get_contents($attempts_file), true) ?: [];
+    }
+    
+    // Clean up old entries (older than 1 hour)
+    $now = time();
+    foreach ($attempts as $user => $data) {
+        if ($data['timestamp'] < ($now - 3600)) {
+            unset($attempts[$user]);
+        }
+    }
+    
+    // Update or create entry for this user
+    if ($success) {
+        // Reset on successful login
+        unset($attempts[$username]);
+    } else {
+        // Increment count on failed login
+        if (!isset($attempts[$username])) {
+            $attempts[$username] = ['count' => 0, 'timestamp' => $now];
+        }
+        $attempts[$username]['count']++;
+        $attempts[$username]['timestamp'] = $now;
+    }
+    
+    // Save updated attempts data
+    file_put_contents($attempts_file, json_encode($attempts));
+}
+
+/**
+ * Checks if a user has too many failed login attempts
+ * 
+ * @param string $username The username
+ * @return bool True if too many attempts, false otherwise
+ */
+function checkLoginAttempts($username) {
+    $attempts_file = __DIR__ . '/logs/login_attempts.json';
+    
+    if (!file_exists($attempts_file)) {
+        return false;
+    }
+    
+    $attempts = json_decode(file_get_contents($attempts_file), true) ?: [];
+    
+    // If no attempts for this user, or attempts are old, allow login
+    if (!isset($attempts[$username])) {
+        return false;
+    }
+    
+    // Check if attempts are recent (within the last hour)
+    $now = time();
+    if ($attempts[$username]['timestamp'] < ($now - 3600)) {
+        unset($attempts[$username]);
+        file_put_contents($attempts_file, json_encode($attempts));
+        return false;
+    }
+    
+    // Block if more than 5 failed attempts in the last hour
+    return $attempts[$username]['count'] >= 5;
 }

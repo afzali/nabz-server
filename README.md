@@ -475,4 +475,4 @@ You can modify authentication settings in `auth_config.php`:
    - For pagination, offset must be a non-negative integer
 
 
-# use php CICD
+# use php simple CICD

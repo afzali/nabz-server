@@ -475,4 +475,7 @@ You can modify authentication settings in `auth_config.php`:
    - For pagination, offset must be a non-negative integer
 
 
-# use php simple CICA 
+### use CICA for simple CICD in Cpanel
+1. Open https://github.com/afzali/CICA in your browser
+2. download the index.php and upload it and done :)
+ 

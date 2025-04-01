@@ -473,3 +473,6 @@ You can modify authentication settings in `auth_config.php`:
    - URL encode all query parameters properly
    - For date ranges, ensure startDate is before endDate
    - For pagination, offset must be a non-negative integer
+
+
+# use php CICD
